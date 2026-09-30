@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useState, useEffect, useMemo } from "react";
-import { X, Minus, Plus, ShoppingCart } from "lucide-react";
+import { X, Minus, Plus, ShoppingCart, Zap } from "lucide-react";
 
 import { useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
@@ -437,6 +437,7 @@ export default function OrderModal({ product, open, onClose }) {
             disabled={isOutOfStock}
             className="flex items-center gap-2 rounded-lg bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-50 shadow-sm"
           >
+            <Zap className="size-4 shrink-0" />
             Order Now
           </button>
         </div>

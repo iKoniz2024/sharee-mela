@@ -147,16 +147,27 @@ function CompactProductCard({ product, index }) {
             )}
           </Link>
 
-          {/* Bottom Order Button */}
+          {/* Bottom Order Buttons */}
           {!isAdmin && (
-            <button
-              disabled={isOutOfStock}
-              onClick={() => setShowModal(true)}
-              className="w-full flex items-center justify-center gap-1.5 bg-foreground py-2 text-xs sm:text-sm font-bold text-background transition-colors hover:bg-foreground/90 disabled:opacity-50"
-            >
-              <ShoppingCart className="size-3.5" />
-              <span>{isOutOfStock ? "Unavailable" : "অর্ডার করুন"}</span>
-            </button>
+            <div className="p-2 pt-0 flex gap-1.5 items-center">
+              <button
+                disabled={isOutOfStock}
+                onClick={() => setShowModal(true)}
+                title="Add to Cart"
+                className="shrink-0 size-8 sm:size-9 flex items-center justify-center rounded-lg border border-primary text-primary transition-colors hover:bg-primary/10 disabled:opacity-50 shadow-xs"
+              >
+                <ShoppingCart className="size-3.5 shrink-0" />
+              </button>
+
+              <button
+                disabled={isOutOfStock}
+                onClick={() => setShowModal(true)}
+                title="Order Now"
+                className="flex-1 h-8 sm:h-9 flex items-center justify-center rounded-lg bg-primary px-2 text-[11px] sm:text-xs font-semibold text-primary-foreground whitespace-nowrap transition-colors hover:bg-primary/90 disabled:opacity-50 shadow-sm"
+              >
+                <span className="whitespace-nowrap">{isOutOfStock ? "Unavailable" : "অর্ডার করুন"}</span>
+              </button>
+            </div>
           )}
         </div>
       </motion.div>

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useState } from "react";
 
 import { motion } from "framer-motion";
+import { ShoppingCart, Zap } from "lucide-react";
 
 import { useQueryClient } from "@tanstack/react-query";
 import { getProductById } from "@/services/product.api";
@@ -77,9 +78,9 @@ export default function FlashSaleProductCard({ product, index, maxStock }) {
           onMouseEnter={handlePrefetch}
           onTouchStart={handlePrefetch}
         >
-          <div className="flex h-full flex-col overflow-hidden rounded-xl border border-border bg-card shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+          <div className="flex h-full flex-col overflow-hidden rounded-lg border border-border bg-card shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
             {/* Section 1: Fixed Consistent Image Section */}
-            <div className="relative aspect-[3/4] h-64 sm:h-72 w-full shrink-0 overflow-hidden bg-muted/30 flex items-center justify-center border-b border-border/40">
+            <div className="relative aspect-[4/5] h-48 sm:h-54 w-full shrink-0 overflow-hidden bg-muted/30 flex items-center justify-center border-b border-border/40" suppressHydrationWarning>
               <img
                 src={product.thumbnail || product.images?.[0] || undefined}
                 alt={product.title}
@@ -113,7 +114,7 @@ export default function FlashSaleProductCard({ product, index, maxStock }) {
             {/* Section 2: Compact Product Information Section */}
             <div className="flex flex-1 flex-col justify-between p-2">
               <div>
-                <h3 className="line-clamp-1 text-xs font-semibold text-foreground sm:text-sm leading-tight">
+                <h3 className="line-clamp-1 text-xs font-medium text-foreground leading-tight">
                   {product.title}
                 </h3>
               </div>
@@ -146,16 +147,29 @@ export default function FlashSaleProductCard({ product, index, maxStock }) {
             </div>
 
             {!isAdmin && (
-              <div className="p-2 pt-0">
+              <div className="p-2 pt-0 flex gap-1.5 items-center">
                 <button
                   disabled={product.stock === 0}
                   onClick={(e) => {
                     e.preventDefault();
                     setShowModal(true);
                   }}
-                  className="w-full rounded-lg bg-primary py-1.5 text-xs sm:text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-50 shadow-sm"
+                  title="Add to Cart"
+                  className="shrink-0 size-8 sm:size-9 flex items-center justify-center rounded border border-primary text-primary transition-colors hover:bg-primary/10 disabled:opacity-50"
                 >
-                  {product.stock === 0 ? "Unavailable" : "অর্ডার করুন"}
+                  <ShoppingCart className="size-3.5 shrink-0" />
+                </button>
+
+                <button
+                  disabled={product.stock === 0}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setShowModal(true);
+                  }}
+                  title="Order Now"
+                  className="flex-1 h-8 sm:h-9 flex items-center justify-center rounded bg-primary px-2 text-[11px] font-medium text-primary-foreground whitespace-nowrap transition-colors hover:bg-primary/90 disabled:opacity-50"
+                >
+                  <span className="whitespace-nowrap">{product.stock === 0 ? "Unavailable" : "অর্ডার করুন"}</span>
                 </button>
               </div>
             )}
