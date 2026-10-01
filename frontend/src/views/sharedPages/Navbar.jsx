@@ -461,7 +461,7 @@ const Navbar = () => {
             )}
 
             {/* Fixed Bottom Navigation Bar for Mobile & Tablet */}
-            <div className="fixed bottom-0 left-0 right-0 z-100 border-t border-border bg-background/95 backdrop-blur-md lg:hidden shadow-2xl">
+            <div className="fixed bottom-0 left-0 right-0 z-[100] border-t border-border bg-background/95 backdrop-blur-md lg:hidden shadow-2xl">
                 <div className="grid grid-cols-5 items-center px-1 py-2">
                     <Link
                         href="/"

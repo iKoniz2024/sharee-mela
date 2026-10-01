@@ -15,14 +15,15 @@ import { useAuth } from "@/hooks/useAuth";
 
 function RelatedProductsSkeleton() {
   return (
-    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
-      {Array.from({ length: 6 }).map((_, i) => (
-        <div key={i} className="flex flex-col overflow-hidden rounded-xl border border-border bg-card">
-          <div className="relative aspect-square w-full p-2">
-            <Skeleton className="h-full w-full rounded-lg" />
-            <Skeleton className="absolute bottom-2 left-1/2 h-6 w-20 -translate-x-1/2 rounded-lg" />
+    <div className="grid grid-cols-2 gap-3.5 sm:gap-5 sm:grid-cols-3 lg:grid-cols-4">
+      {Array.from({ length: 4 }).map((_, i) => (
+        <div key={i} className="overflow-hidden rounded-lg border border-border bg-card">
+          <Skeleton className="aspect-square w-full rounded-none" />
+          <div className="space-y-3 p-3">
+            <Skeleton className="h-4 w-3/4" />
+            <Skeleton className="h-4 w-1/2" />
+            <Skeleton className="h-8 w-full rounded" />
           </div>
-          <Skeleton className="h-9 w-full rounded-none" />
         </div>
       ))}
     </div>
@@ -91,19 +92,20 @@ function CompactProductCard({ product, index }) {
             transition: { delay: i * 0.05, duration: 0.4, ease: [0.22, 1, 0.36, 1] },
           }),
         }}
+        className="h-full"
       >
-        <div className="group relative flex h-full flex-col overflow-hidden rounded-xl border border-border bg-card shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
-          {/* Section 1: Fixed Consistent Image Section */}
+        <div className="group flex h-full flex-col overflow-hidden rounded-lg border border-border bg-card shadow-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
+          {/* Section 1: Compact Image Section (Aspect Square) */}
           <Link
             href={`/product/${product._id}`}
-            className="relative block aspect-square h-40 sm:h-44 w-full shrink-0 overflow-hidden bg-muted/30 border-b border-border/40 flex items-center justify-center"
+            className="relative block aspect-square w-full shrink-0 overflow-hidden bg-muted/30 border-b border-border/40"
             onMouseEnter={handlePrefetch}
             onTouchStart={handlePrefetch}
+            suppressHydrationWarning
           >
-            {/* Badges */}
             {activeBadgeInfo && (
               <div className="absolute left-2 top-2 z-10">
-                <Badge className={`text-[10px] font-semibold px-2 py-0.5 shadow-md flex items-center gap-1 ${activeBadgeInfo.className}`}>
+                <Badge className={`text-[10px] font-semibold px-1.5 py-0.5 shadow-xs flex items-center gap-1 ${activeBadgeInfo.className}`}>
                   {(() => {
                     const Icon = activeBadgeInfo.icon;
                     return <Icon className="size-3" />;
@@ -114,7 +116,7 @@ function CompactProductCard({ product, index }) {
             )}
 
             {hasDiscount && (
-              <div className="absolute left-0 top-3 z-10 rounded-r bg-secondary px-2 py-0.5 text-[10px] font-bold text-secondary-foreground shadow-sm">
+              <div className={`absolute top-2 z-10 rounded-r bg-secondary px-2 py-0.5 text-[10px] font-bold text-secondary-foreground shadow-xs ${activeBadgeInfo ? "right-2 rounded" : "left-0"}`}>
                 -{Math.round(product.discountPercentage)}%
               </div>
             )}
@@ -122,53 +124,67 @@ function CompactProductCard({ product, index }) {
             <img
               src={product.thumbnail || product.images?.[0] || undefined}
               alt={product.title}
-              className="h-full w-full object-contain p-2 transition-transform duration-500 group-hover:scale-105"
+              className="h-full w-full object-cover object-top transition-transform duration-300 ease-out group-hover:scale-105"
               loading="lazy"
             />
 
-            {/* Price Pill Overlay */}
-            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 z-10 flex items-center justify-center gap-1.5 rounded-lg bg-background/95 px-2.5 py-1 shadow-sm border border-border/60 backdrop-blur-md whitespace-nowrap">
-              <span className="text-xs sm:text-sm font-bold text-foreground">
-                {formatBDT(hasDiscount ? discountedPrice : product.price)}
-              </span>
-              {hasDiscount && (
-                <span className="text-[10px] sm:text-xs text-muted-foreground line-through font-normal">
-                  {formatBDT(product.price)}
-                </span>
-              )}
-            </div>
-
             {isOutOfStock && (
-              <div className="absolute inset-0 z-20 flex items-center justify-center bg-background/70 backdrop-blur-sm">
-                <span className="rounded-full bg-destructive px-2 py-0.5 text-[10px] font-semibold text-destructive-foreground">
-                  Stock Out
-                </span>
+              <div className="absolute inset-0 z-20 flex items-center justify-center bg-background/60 backdrop-blur-xs">
+                <Badge variant="destructive" className="text-[11px] font-semibold">
+                  Out of Stock
+                </Badge>
               </div>
             )}
           </Link>
 
-          {/* Bottom Order Buttons */}
-          {!isAdmin && (
-            <div className="p-2 pt-0 flex gap-1.5 items-center">
-              <button
-                disabled={isOutOfStock}
-                onClick={() => setShowModal(true)}
-                title="Add to Cart"
-                className="shrink-0 size-8 sm:size-9 flex items-center justify-center rounded-lg border border-primary text-primary transition-colors hover:bg-primary/10 disabled:opacity-50 shadow-xs"
-              >
-                <ShoppingCart className="size-3.5 shrink-0" />
-              </button>
+          {/* Section 2: Compact Content Section */}
+          <div className="flex flex-1 flex-col justify-between p-2 sm:p-2.5">
+            <Link
+              href={`/product/${product._id}`}
+              className="group/title block space-y-1"
+              onMouseEnter={handlePrefetch}
+              onTouchStart={handlePrefetch}
+            >
+              <h3 className="line-clamp-2 text-xs sm:text-sm font-medium text-foreground leading-snug transition-colors group-hover/title:text-primary">
+                {product.title}
+              </h3>
 
-              <button
-                disabled={isOutOfStock}
-                onClick={() => setShowModal(true)}
-                title="Order Now"
-                className="flex-1 h-8 sm:h-9 flex items-center justify-center rounded-lg bg-primary px-2 text-[11px] sm:text-xs font-semibold text-primary-foreground whitespace-nowrap transition-colors hover:bg-primary/90 disabled:opacity-50 shadow-sm"
-              >
-                <span className="whitespace-nowrap">{isOutOfStock ? "Unavailable" : "অর্ডার করুন"}</span>
-              </button>
-            </div>
-          )}
+              <div className="flex items-baseline flex-wrap gap-x-1.5 gap-y-0.5 min-w-0 pt-0.5">
+                <span className="text-xs sm:text-sm font-bold text-foreground">
+                  {formatBDT(hasDiscount ? discountedPrice : product.price)}
+                </span>
+                {hasDiscount && (
+                  <span className="text-[10px] sm:text-xs text-muted-foreground line-through font-normal">
+                    {formatBDT(product.price)}
+                  </span>
+                )}
+              </div>
+            </Link>
+
+            {/* Section 3: Sleek Action Buttons (Add to Cart is smaller than Order button) */}
+            {!isAdmin && (
+              <div className="pt-2 flex gap-1.5 items-center mt-auto">
+                <button
+                  disabled={isOutOfStock}
+                  onClick={() => setShowModal(true)}
+                  title="Add to Cart"
+                  className="shrink-0 h-8 px-2 flex items-center justify-center gap-1 rounded border border-primary text-primary transition-colors hover:bg-primary/10 disabled:opacity-50"
+                >
+                  <ShoppingCart className="size-3.5 shrink-0" />
+                  <span className="hidden sm:inline text-[11px] sm:text-xs font-medium whitespace-nowrap">Add to Cart</span>
+                </button>
+
+                <button
+                  disabled={isOutOfStock}
+                  onClick={() => setShowModal(true)}
+                  title="Order Now"
+                  className="flex-1 h-8 flex items-center justify-center rounded bg-primary px-2 text-[11px] sm:text-xs font-medium text-primary-foreground whitespace-nowrap transition-colors hover:bg-primary/90 disabled:opacity-50"
+                >
+                  <span className="whitespace-nowrap">{isOutOfStock ? "Unavailable" : "অর্ডার করুন"}</span>
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </motion.div>
 
@@ -193,13 +209,11 @@ export default function RelatedProducts({ currentProduct }) {
       let result = [];
 
       if (category) {
-        // Fetch products in the same category
         const response = await getProducts({ category, limit: 12 });
         const prods = response?.products || (Array.isArray(response) ? response : []);
         result = prods.filter((p) => p._id !== currentId);
       }
 
-      // ONLY if there are ZERO products in the same category, fallback to mixed New Arrivals & Best Selling
       if (result.length === 0) {
         try {
           const [newRes, bestRes] = await Promise.all([
@@ -215,7 +229,6 @@ export default function RelatedProducts({ currentProduct }) {
             .filter((p) => p._id !== currentId)
             .map((p) => ({ ...p, badge: p.badge || "best-seller" }));
 
-          // Interleave New Arrivals and Best Selling products
           const mixed = [];
           const seenIds = new Set([currentId]);
           const maxLength = Math.max(newProds.length, bestProds.length);
@@ -264,7 +277,7 @@ export default function RelatedProducts({ currentProduct }) {
       {isLoading ? (
         <RelatedProductsSkeleton />
       ) : (
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
+        <div className="grid grid-cols-2 gap-3.5 sm:gap-5 sm:grid-cols-3 lg:grid-cols-4">
           {relatedProducts.map((product, i) => (
             <CompactProductCard
               key={product._id}

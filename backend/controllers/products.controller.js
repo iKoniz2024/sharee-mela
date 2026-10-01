@@ -83,7 +83,7 @@ const createProduct = async (req, res) => {
         };
 
         const result = await productsCollection.insertOne(newProduct);
-        clearCache();
+        clearCache("product");
 
         res.status(201).send({
             message: "Product created successfully",
@@ -479,7 +479,7 @@ const updateProduct = async (req, res) => {
             return res.status(404).send({ message: "Product not found" });
         }
 
-        clearCache();
+        clearCache("product");
         res.send({ message: "Product updated successfully" });
 
     } catch (error) {
@@ -500,7 +500,7 @@ const deleteProduct = async (req, res) => {
             return res.status(404).send({ message: "Product not found" });
         }
 
-        clearCache();
+        clearCache("product");
         res.send({ message: "Product deleted successfully" });
 
     } catch (error) {

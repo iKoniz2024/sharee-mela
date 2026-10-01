@@ -44,7 +44,7 @@ export default function FloatingButtons() {
   if (!mounted) return null;
 
   return (
-    <div className="fixed bottom-20 right-3 z-90 flex flex-col gap-3 items-center lg:bottom-8 lg:right-8 sm:gap-4">
+    <div className="fixed bottom-20 right-3 z-[90] flex flex-col gap-3 items-center lg:bottom-8 lg:right-8 sm:gap-4">
       {showScrollTop && (
         <button
           onClick={scrollToTop}

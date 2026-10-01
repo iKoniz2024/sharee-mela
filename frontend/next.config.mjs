@@ -14,12 +14,21 @@ const isVercel = process.env.VERCEL === '1' || Boolean(process.env.VERCEL);
 
 const nextConfig = {
   reactStrictMode: true,
-  ...(isVercel ? {} : { output: 'standalone' }),
+  compress: true,
+  images: {
+    remotePatterns: [
+      { protocol: "https", hostname: "res.cloudinary.com" },
+      { protocol: "https", hostname: "**" },
+    ],
+    formats: ["image/avif", "image/webp"],
+    minimumCacheTTL: 2592000,
+  },
+  ...(isVercel ? {} : { output: "standalone" }),
   async redirects() {
     return [
       {
-        source: '/shop',
-        destination: '/products',
+        source: "/shop",
+        destination: "/products",
         permanent: true,
       },
     ];

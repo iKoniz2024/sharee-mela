@@ -17,6 +17,8 @@ const orderRoutes = require("./routes/orders.route");
 const settingsRoutes = require("./routes/settings.route");
 const bannerRoutes = require("./routes/banner.route");
 
+const compressionMiddleware = require("./middlewares/compression");
+
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -29,6 +31,8 @@ const allowedOrigins = [
     "http://localhost:3000",
     "http://localhost:3001",
 ].filter(Boolean);
+
+app.use(compressionMiddleware);
 
 app.use(
     cors({

@@ -643,7 +643,8 @@ const updateOrderStatus = async (req, res) => {
             }
         );
 
-        clearCache();
+        clearCache("orders");
+        clearCache("products");
 
         res.send({
             message: "Order status updated successfully",
@@ -723,7 +724,8 @@ const cancelOrder = async (req, res) => {
             }
         );
 
-        clearCache();
+        clearCache("orders");
+        clearCache("products");
 
         res.send({
             message: "Order cancelled successfully"
@@ -1058,7 +1060,8 @@ const deleteOrder = async (req, res) => {
             return res.status(404).send({ message: "Order not found" });
         }
 
-        clearCache();
+        clearCache("orders");
+        clearCache("products");
         res.send({ message: "Order deleted successfully" });
     } catch (error) {
         console.log(error);

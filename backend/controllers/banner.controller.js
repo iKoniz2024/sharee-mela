@@ -21,7 +21,7 @@ const createBanner = async (req, res) => {
 
         const result = await bannersCollection.insertOne(newBanner);
 
-        clearCache();
+        clearCache("banners");
 
         res.status(201).send({
             message: "Banner created successfully",
@@ -75,7 +75,7 @@ const updateBanner = async (req, res) => {
         if (result.matchedCount === 0) {
             return res.status(404).send({ message: "Banner not found" });
         }
-        clearCache();
+        clearCache("banners");
         res.send({ message: "Banner updated successfully" });
     } catch (error) {
         console.log(error);
@@ -92,7 +92,7 @@ const deleteBanner = async (req, res) => {
         if (result.deletedCount === 0) {
             return res.status(404).send({ message: "Banner not found" });
         }
-        clearCache();
+        clearCache("banners");
         res.send({ message: "Banner deleted successfully" });
     } catch (error) {
         console.log(error);

@@ -19,7 +19,7 @@ const createCategory = async (req, res) => {
         };
 
         const result = await categoriesCollection.insertOne(category);
-        clearCache();
+        clearCache("categories");
 
         res.status(201).send({
             message: "Category created successfully",
@@ -169,7 +169,7 @@ const updateCategory = async (req, res) => {
             return res.status(404).send({ message: "Category not found" });
         }
 
-        clearCache();
+        clearCache("categories");
         res.send({ message: "Category updated successfully" });
 
     } catch (error) {
@@ -190,7 +190,7 @@ const deleteCategory = async (req, res) => {
             return res.status(404).send({ message: "Category not found" });
         }
 
-        clearCache();
+        clearCache("categories");
         res.send({ message: "Category deleted successfully" });
 
     } catch (error) {

@@ -84,14 +84,11 @@ const clearCache = (prefixOrKey) => {
         return;
     }
 
-    if (cache.has(prefixOrKey)) {
-        cache.delete(prefixOrKey);
-        return;
-    }
+    const target = String(prefixOrKey).toLowerCase();
 
-    // Clear matching prefix
     for (const key of cache.keys()) {
-        if (key.startsWith(prefixOrKey)) {
+        const lowerKey = String(key).toLowerCase();
+        if (lowerKey === target || lowerKey.startsWith(target)) {
             cache.delete(key);
         }
     }

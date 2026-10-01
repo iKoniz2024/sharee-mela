@@ -84,7 +84,7 @@ export default function RecentSalesToast() {
   if (!currentSale) return null;
 
   return (
-    <div className="fixed bottom-4 left-4 z-50 pointer-events-none max-w-sm sm:max-w-md">
+    <div className="fixed bottom-20 left-3 sm:left-4 lg:bottom-4 lg:left-4 z-[90] pointer-events-none max-w-[calc(100vw-1.5rem)] sm:max-w-md">
       <AnimatePresence>
         {isVisible && (
           <motion.div

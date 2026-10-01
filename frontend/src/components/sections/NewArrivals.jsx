@@ -14,11 +14,12 @@ function NewArrivalsSkeleton() {
   return (
     <div className="flex gap-3 overflow-hidden">
       {Array.from({ length: 6 }).map((_, i) => (
-        <div key={i} className="shrink-0 w-40 sm:w-45">
-          <Skeleton className="aspect-3/4 w-full rounded-lg" />
-          <div className="mt-2 space-y-2">
+        <div key={i} className="shrink-0 w-37.5 sm:w-45 overflow-hidden rounded-lg border border-border bg-card">
+          <Skeleton className="aspect-square w-full rounded-none" />
+          <div className="space-y-3 p-3">
             <Skeleton className="h-4 w-3/4" />
-            <Skeleton className="h-3 w-1/2" />
+            <Skeleton className="h-4 w-1/2" />
+            <Skeleton className="h-8 w-full rounded" />
           </div>
         </div>
       ))}
