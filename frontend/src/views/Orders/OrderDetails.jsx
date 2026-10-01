@@ -111,7 +111,7 @@ function ProgressTracker({ status }) {
   const activeIdx = currentIdx >= 0 ? currentIdx : 0;
 
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex items-center justify-between overflow-x-auto min-w-[320px] sm:min-w-0 pb-1">
       {STATUS_STEPS.map((step, i) => {
         const isActive = i <= activeIdx;
         const isCurrent = i === activeIdx;

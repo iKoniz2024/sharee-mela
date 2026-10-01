@@ -388,7 +388,7 @@ export default function AdminCategories({ children }) {
                 {/* Category Dynamic Attribute Definitions Section */}
                 <div className="rounded-xl border border-border bg-muted/20 p-4 space-y-3">
                   <div className="space-y-2 border-b border-border/40 pb-3">
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                       <h3 className="text-sm font-bold text-foreground flex items-center gap-1.5">
                         <Sliders className="size-4 text-primary" />
                         Dynamic Category Attribute Builder
@@ -397,7 +397,7 @@ export default function AdminCategories({ children }) {
                         type="button"
                         variant="primary"
                         size="sm"
-                        className="h-7 text-xs"
+                        className="h-7 text-xs w-full sm:w-auto shrink-0"
                         onClick={() => createAttrAppend({ key: "", label: "", type: "text", options: "", required: false, unit: "", useAsVariant: false })}
                       >
                         <Plus className="size-3 mr-1" /> Custom Attribute
@@ -737,7 +737,7 @@ export default function AdminCategories({ children }) {
                       {/* Edit Category Dynamic Attribute Definitions Section */}
                       <div className="rounded-xl border border-border bg-muted/20 p-4 space-y-3">
                         <div className="space-y-2 border-b border-border/40 pb-3">
-                          <div className="flex items-center justify-between">
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                             <h3 className="text-sm font-bold text-foreground flex items-center gap-1.5">
                               <Sliders className="size-4 text-primary" />
                               Dynamic Category Attribute Builder
@@ -746,7 +746,7 @@ export default function AdminCategories({ children }) {
                               type="button"
                               variant="primary"
                               size="sm"
-                              className="h-7 text-xs"
+                              className="h-7 text-xs w-full sm:w-auto shrink-0"
                               onClick={() => updateAttrAppend({ key: "", label: "", type: "text", options: "", required: false, unit: "", useAsVariant: false })}
                             >
                               <Plus className="size-3 mr-1" /> Custom Attribute

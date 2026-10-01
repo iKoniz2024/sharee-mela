@@ -174,8 +174,8 @@ export default function AdminOrderDetails({ children }) {
         </div>
 
         {order.orderStatus !== "cancelled" && (
-          <div className="mb-8 rounded-xl border border-border bg-card p-6 shadow-sm">
-            <div className="flex items-center justify-between">
+          <div className="mb-8 overflow-x-auto rounded-xl border border-border bg-card p-4 sm:p-6 shadow-sm">
+            <div className="flex items-center justify-between min-w-[320px] sm:min-w-0">
               {STATUS_STEPS.map((step, i) => (
                 <div key={step} className="flex flex-1 items-center">
                   <div className="flex flex-col items-center">

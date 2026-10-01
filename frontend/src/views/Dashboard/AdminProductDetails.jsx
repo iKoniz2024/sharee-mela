@@ -425,7 +425,7 @@ export default function AdminProductDetails({ children }) {
           className="space-y-6"
         >
           {/* Header Action Bar */}
-          <div className="flex items-center justify-between rounded-2xl border border-border bg-card p-5 shadow-xs">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-2xl border border-border bg-card p-4 sm:p-5 shadow-xs">
             <div>
               <h2 className="text-lg font-bold text-foreground">Edit Product</h2>
               <p className="text-xs text-muted-foreground">Update product specifications, inventory, variants, and media</p>
@@ -433,7 +433,7 @@ export default function AdminProductDetails({ children }) {
             <Button
               type="submit"
               disabled={updateMutation.isPending}
-              className="rounded-xl px-6 font-bold shadow-sm"
+              className="w-full sm:w-auto rounded-xl px-6 font-bold shadow-sm shrink-0"
             >
               <Save className="size-4 mr-1.5" />
               {updateMutation.isPending ? "Saving Changes..." : "Save Changes"}
