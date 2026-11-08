@@ -32,11 +32,20 @@ export default function RecentSalesToast() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
   const [dismissed, setDismissed] = useState(false);
+  const [shouldFetch, setShouldFetch] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShouldFetch(true);
+    }, 3500);
+    return () => clearTimeout(timer);
+  }, []);
 
   const { data: sales, isLoading } = useQuery({
     queryKey: ["recent-sales-toast"],
     queryFn: getRecentSales,
-    staleTime: 30000,
+    enabled: shouldFetch,
+    staleTime: 60000,
     refetchInterval: 60000,
   });
 

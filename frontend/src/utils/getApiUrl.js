@@ -1,5 +1,9 @@
 export function getApiUrl() {
   if (typeof window === "undefined") {
+    // If running in Vercel serverless without an explicit backend URL, skip unreachable localhost
+    if (process.env.VERCEL && !process.env.NEXT_PUBLIC_API_URL && !process.env.INTERNAL_API_URL) {
+      return "";
+    }
     // Server side: Force 127.0.0.1 to avoid Node.js 18+ IPv6 (::1) DNS connection fallback timeout
     let serverUrl = process.env.NEXT_PUBLIC_API_URL || process.env.INTERNAL_API_URL || "http://127.0.0.1:5000/api";
     serverUrl = serverUrl.replace("localhost", "127.0.0.1").trim().replace(/\/+$/, "");

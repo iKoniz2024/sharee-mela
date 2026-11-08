@@ -9,10 +9,20 @@ export const revalidate = 600;
 
 async function fetchHomeData() {
   const baseUrl = getApiUrl();
+  if (!baseUrl) {
+    return {
+      categoriesData: [],
+      newArrivalsData: { products: [] },
+      bestSellingData: { products: [] },
+      flashSaleData: { products: [] },
+      bannersData: [],
+    };
+  }
+
   const fetchOpts = {
     next: { revalidate: 600 },
     headers: { Connection: "close" },
-    signal: AbortSignal.timeout(3000),
+    signal: AbortSignal.timeout(600),
   };
 
   try {

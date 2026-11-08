@@ -7,10 +7,12 @@ const dbPass = encodeURIComponent(process.env.DB_PASS || "");
 
 const uri = `mongodb://${dbUser}:${dbPass}@cluster0-shard-00-00.bb41v.mongodb.net:27017,cluster0-shard-00-01.bb41v.mongodb.net:27017,cluster0-shard-00-02.bb41v.mongodb.net:27017/?authSource=admin&replicaSet=atlas-imfz1t-shard-0&tls=true`;
 
+const isVercel = Boolean(process.env.VERCEL);
+
 const client = new MongoClient(uri, {
-    maxPoolSize: 50,
-    minPoolSize: 2,
-    maxIdleTimeMS: 30000,
+    maxPoolSize: isVercel ? 10 : 50,
+    minPoolSize: isVercel ? 0 : 2,
+    maxIdleTimeMS: 15000,
     connectTimeoutMS: 5000,
     socketTimeoutMS: 30000,
     serverSelectionTimeoutMS: 5000,
@@ -39,7 +41,7 @@ async function connectDB() {
 
     db = await connectPromise;
 
-    if (!indexesInitialized) {
+    if (!indexesInitialized && !isVercel) {
         indexesInitialized = true;
         setupIndexes(db).catch(err => console.error("Index setup error:", err));
         warmUpCache(db).catch(err => console.error("Startup warmup failed:", err));

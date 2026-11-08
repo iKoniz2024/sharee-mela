@@ -20,7 +20,8 @@ axiosSecure.interceptors.response.use(
       error.response.status === 401 &&
       !originalRequest._retry &&
       originalRequest.url &&
-      !originalRequest.url.includes("/auth/refresh-token")
+      !originalRequest.url.includes("/auth/refresh-token") &&
+      !originalRequest.url.includes("/users/profile")
     ) {
       originalRequest._retry = true;
       try {

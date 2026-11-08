@@ -22,7 +22,10 @@ export default function Providers({ children }) {
         staleTime: 10 * 60 * 1000, // 10 minutes
         gcTime: 15 * 60 * 1000, // 15 minutes cache retention
         refetchOnWindowFocus: false,
-        retry: 1,
+        retry: (failureCount, error) => {
+          if (error?.response?.status >= 400 && error?.response?.status < 500) return false;
+          return failureCount < 1;
+        },
       },
     },
   }));
