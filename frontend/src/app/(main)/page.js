@@ -12,7 +12,7 @@ async function fetchHomeData() {
   const fetchOpts = {
     next: { revalidate: 600 },
     headers: { Connection: "close" },
-    signal: AbortSignal.timeout(15000),
+    signal: AbortSignal.timeout(3000),
   };
 
   try {

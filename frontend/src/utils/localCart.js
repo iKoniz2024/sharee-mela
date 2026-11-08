@@ -7,9 +7,14 @@ export function getLocalCart() {
     if (!raw) return [];
     const parsed = JSON.parse(raw);
     if (!Array.isArray(parsed)) return [];
-    const cleaned = parsed.filter(
-      (item) => item.productId && item.price !== undefined && item.price !== null
-    );
+    const cleaned = parsed
+      .map((item) => ({
+        ...item,
+        productId: item.productId || item._id || item.id,
+      }))
+      .filter(
+        (item) => item.productId && item.price !== undefined && item.price !== null
+      );
     if (cleaned.length !== parsed.length) {
       localStorage.setItem(CART_KEY, JSON.stringify(cleaned));
     }
@@ -30,11 +35,15 @@ export function setLocalCart(items) {
 
 export function addToLocalCart(item) {
   const cart = getLocalCart();
+  const targetId = String(item.productId || item._id || item.id || "");
+  const targetSize = String(item.size || "").trim();
+  const targetColor = String(item.color || "").trim();
+
   const existing = cart.find(
     (c) =>
-      c.productId === item.productId &&
-      (c.size || "") === (item.size || "") &&
-      (c.color || "") === (item.color || "")
+      String(c.productId || c._id || c.id || "") === targetId &&
+      String(c.size || "").trim() === targetSize &&
+      String(c.color || "").trim() === targetColor
   );
   if (existing) {
     existing.quantity += item.quantity;
@@ -53,10 +62,14 @@ export function addToLocalCart(item) {
 
 export function updateLocalCartItem(productId, quantity, size = "", color = "") {
   let cart = getLocalCart();
+  const targetId = String(productId || "");
+  const targetSize = String(size || "").trim();
+  const targetColor = String(color || "").trim();
+
   const isMatch = (c) =>
-    c.productId === productId &&
-    (c.size || "") === (size || "") &&
-    (c.color || "") === (color || "");
+    String(c.productId || c._id || c.id || "") === targetId &&
+    String(c.size || "").trim() === targetSize &&
+    String(c.color || "").trim() === targetColor;
 
   if (quantity <= 0) {
     cart = cart.filter((c) => !isMatch(c));
@@ -67,15 +80,24 @@ export function updateLocalCartItem(productId, quantity, size = "", color = "") 
   return cart;
 }
 
-export function removeFromLocalCart(productId, size = "", color = "") {
-  const cart = getLocalCart().filter(
-    (c) =>
-      !(
-        c.productId === productId &&
-        (c.size || "") === (size || "") &&
-        (c.color || "") === (color || "")
-      )
-  );
+export function removeFromLocalCart(productId, size = "", color = "", index = -1) {
+  let cart = getLocalCart();
+  if (typeof index === "number" && index >= 0 && index < cart.length) {
+    cart.splice(index, 1);
+  } else {
+    const targetId = String(productId || "");
+    const targetSize = String(size || "").trim();
+    const targetColor = String(color || "").trim();
+
+    cart = cart.filter(
+      (c) =>
+        !(
+          String(c.productId || c._id || c.id || "") === targetId &&
+          String(c.size || "").trim() === targetSize &&
+          String(c.color || "").trim() === targetColor
+        )
+    );
+  }
   setLocalCart(cart);
   return cart;
 }

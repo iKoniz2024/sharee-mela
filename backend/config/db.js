@@ -9,7 +9,7 @@ const uri = `mongodb://${dbUser}:${dbPass}@cluster0-shard-00-00.bb41v.mongodb.ne
 
 const client = new MongoClient(uri, {
     maxPoolSize: 50,
-    minPoolSize: 10,
+    minPoolSize: 2,
     maxIdleTimeMS: 30000,
     connectTimeoutMS: 5000,
     socketTimeoutMS: 30000,

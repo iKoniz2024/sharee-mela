@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Trophy, Flame, Star, ShoppingCart } from "lucide-react";
+import { Trophy, Flame, Star, ShoppingCart, Eye } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { formatBDT } from "@/utils/currency";
 import { useQueryClient } from "@tanstack/react-query";
@@ -107,12 +107,20 @@ export default function ProductCard({ product, index, badge }) {
             <img
               src={product.thumbnail || product.images?.[0] || undefined}
               alt={product.title}
-              className="h-full w-full object-cover object-top transition-transform duration-300 ease-out group-hover:scale-105"
+              className="h-full w-full object-cover object-top transition-all duration-300 ease-out group-hover:scale-105 group-hover:blur-[1px]"
               loading="lazy"
             />
 
+            {/* View Details Blur Overlay (rises from card bottom on hover) */}
+            <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/25 backdrop-blur-xs translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out pointer-events-none">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-white/95 px-3 py-1.5 text-xs font-bold text-neutral-900 shadow-md backdrop-blur-sm transform transition-transform duration-200 group-hover:scale-105">
+                <Eye className="size-3.5 text-primary" />
+                <span>View Details</span>
+              </span>
+            </div>
+
             {hasDiscount && (
-              <div className="absolute left-0 top-2 z-10 rounded-r bg-secondary px-2 py-0.5 text-[10px] font-bold text-secondary-foreground shadow-xs">
+              <div className="absolute left-0 top-2 z-30 rounded-r bg-secondary px-2 py-0.5 text-[10px] font-bold text-secondary-foreground shadow-xs">
                 -{Math.round(product.discountPercentage)}%
               </div>
             )}

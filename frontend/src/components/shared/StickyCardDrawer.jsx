@@ -59,23 +59,42 @@ export default function StickyCartDrawer() {
   );
 
   const removeMutation = useMutation({
-    mutationFn: ({ productId, size }) => {
-      removeFromLocalCart(productId, size);
+    mutationFn: ({ productId, size, color, index }) => {
+      removeFromLocalCart(productId, size, color, index);
       return Promise.resolve();
     },
-    onMutate: async ({ productId, size }) => {
+    onMutate: async ({ productId, size, color, index }) => {
       await queryClient.cancelQueries({ queryKey: ["localCart"] });
       const previousCart = queryClient.getQueryData(["localCart"]);
       queryClient.setQueryData(["localCart"], (old) => {
         if (!old?.items) return old;
+        const newItems =
+          typeof index === "number" && index >= 0
+            ? old.items.filter((_, i) => i !== index)
+            : old.items.filter(
+                (item) =>
+                  !(
+                    String(item.productId || item._id || item.id) === String(productId) &&
+                    String(item.size || "").trim() === String(size || "").trim() &&
+                    String(item.color || "").trim() === String(color || "").trim()
+                  )
+              );
+        const updatedTotalItems = newItems.reduce((sum, item) => sum + (item.quantity ?? 1), 0);
+        const updatedTotalPrice = newItems.reduce(
+          (sum, item) => sum + (item.price * (item.quantity ?? 1)),
+          0
+        );
         return {
           ...old,
-          items: old.items.filter(
-            (item) => !(item.productId === productId && (item.size || "") === (size || ""))
-          ),
+          items: newItems,
+          totalItems: updatedTotalItems,
+          totalPrice: updatedTotalPrice,
         };
       });
       return { previousCart };
+    },
+    onSuccess: () => {
+      toast.success("Item removed from cart");
     },
     onError: (_err, _vars, context) => {
       if (context?.previousCart) {
@@ -144,8 +163,11 @@ export default function StickyCartDrawer() {
             </div>
           ) : (
             <div className="space-y-4">
-              {items.map((item) => (
-                <div key={item.productId} className="flex items-start gap-3 rounded-3xl border border-border bg-card p-3">
+              {items.map((item, index) => (
+                <div
+                  key={`${item.productId || item._id || "item"}-${item.size || ""}-${item.color || ""}-${index}`}
+                  className="flex items-start gap-3 rounded-3xl border border-border bg-card p-3"
+                >
                   {item.thumbnail ? (
                     <img src={item.thumbnail} alt={item.title || "Product"} className="h-16 w-16 rounded-lg object-cover" />
                   ) : (
@@ -166,8 +188,16 @@ export default function StickyCartDrawer() {
                   </div>
                   <button
                     type="button"
-                    className="rounded-lg p-2 text-muted-foreground transition hover:bg-destructive/10 hover:text-destructive"
-                    onClick={() => removeMutation.mutate({ productId: item.productId, size: item.size || "" })}
+                    disabled={removeMutation.isPending}
+                    className="rounded-lg p-2 text-muted-foreground transition hover:bg-destructive/10 hover:text-destructive disabled:opacity-50"
+                    onClick={() =>
+                      removeMutation.mutate({
+                        productId: item.productId || item._id,
+                        size: item.size || "",
+                        color: item.color || "",
+                        index,
+                      })
+                    }
                     aria-label={`Remove ${item.title || "item"} from cart`}
                   >
                     <Trash2 className="size-4" />
