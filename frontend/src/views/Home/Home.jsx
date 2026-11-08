@@ -24,7 +24,10 @@ export default function Home({ initialData }) {
       <Helmet>
         <title>{siteName ? `${siteName} | Home` : "Home | Sharee Mela"}</title>
       </Helmet>
-      <Hero initialData={initialData?.bannersData} />
+      <Hero
+        initialData={initialData?.bannersData}
+        initialCategories={initialData?.categoriesData}
+      />
       <NewArrivals initialData={initialData?.newArrivalsData} />
       <Categories initialData={initialData?.categoriesData} />
       <BestSellingProducts initialData={initialData?.bestSellingData} />

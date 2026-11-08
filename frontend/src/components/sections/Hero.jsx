@@ -46,20 +46,56 @@ const heroStyles = `
   }
 `;
 
-export default function Hero({ initialData }) {
+function HeroSkeleton() {
+  return (
+    <section id="hero" className="relative py-3 sm:py-5">
+      <div className="mx-auto max-w-7xl px-3 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-5 items-start">
+          {/* Left Column Skeleton */}
+          <aside className="hidden lg:block lg:col-span-3">
+            <div className="rounded-xl border border-border bg-card p-4 space-y-3 animate-pulse h-[350px]">
+              <div className="h-6 w-3/4 bg-muted rounded" />
+              <div className="space-y-2 pt-2">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <div key={i} className="h-5 w-full bg-muted/60 rounded" />
+                ))}
+              </div>
+            </div>
+          </aside>
+
+          {/* Right Column Skeleton */}
+          <div className="lg:col-span-9 flex flex-col gap-4 animate-pulse">
+            <div className="w-full aspect-[2.1/1] sm:aspect-[2.5/1] md:aspect-[2.7/1] rounded-2xl bg-muted" />
+            <div className="flex justify-center gap-2">
+              <div className="size-10 sm:size-12 rounded-lg bg-muted" />
+              <div className="size-10 sm:size-12 rounded-lg bg-muted" />
+              <div className="size-10 sm:size-12 rounded-lg bg-muted" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export default function Hero({ initialData, initialCategories }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [mainSwiper, setMainSwiper] = useState(null);
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isFetching } = useQuery({
     queryKey: ["banners"],
     queryFn: getBanners,
-    initialData,
+    initialData: (Array.isArray(initialData) && initialData.length > 0) ? initialData : undefined,
     staleTime: 10 * 60 * 1000,
   });
 
   const { data: categoriesData } = useQuery({
     queryKey: ["categories"],
     queryFn: getCategories,
+    initialData: (Array.isArray(initialCategories) && initialCategories.length > 0)
+      || (Array.isArray(initialCategories?.categories) && initialCategories.categories.length > 0)
+      ? initialCategories
+      : undefined,
     staleTime: 10 * 60 * 1000,
   });
 
@@ -71,16 +107,8 @@ export default function Hero({ initialData }) {
 
   const banners = (data ?? []).filter((b) => b.isActive !== false && (b.image || b.images?.length > 0));
 
-  if (isLoading && banners.length === 0) {
-    return (
-      <section id="hero" className="relative overflow-hidden py-4">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex h-80 items-center justify-center sm:h-100 lg:h-125">
-            <div className="size-8 animate-spin rounded-full border-4 border-foreground border-t-transparent" />
-          </div>
-        </div>
-      </section>
-    );
+  if ((isLoading || isFetching) && banners.length === 0) {
+    return <HeroSkeleton />;
   }
 
   if (banners.length === 0) {
